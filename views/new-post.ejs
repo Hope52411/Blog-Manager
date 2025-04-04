@@ -1,0 +1,12 @@
+<h2 class="page-title">Create New Post</h2>
+<form action="/post/new" method="POST" class="form-box">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+  <label for="title">Title:</label>
+  <input type="text" name="title" id="title" required>
+
+  <label for="content">Content:</label>
+  <textarea name="content" id="content" rows="6" placeholder="Write your post here..." required></textarea>
+
+  <button type="submit" class="btn">Publish</button>
+</form>

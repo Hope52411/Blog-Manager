@@ -1,0 +1,192 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 2em;
+    background-color: #f7f7f7;
+    color: #333;
+  }
+  
+  header {
+    background-color: #333;
+    padding: 1em;
+    color: #fff;
+    margin-bottom: 2em;
+  }
+  
+  header a {
+    color: #fff;
+    margin-right: 10px;
+    text-decoration: none;
+  }
+  
+  main {
+    background: white;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  input, textarea, button {
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+  }
+  
+  button {
+    background-color: #008cba;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #005f5f;
+  }
+  
+  .post-meta {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+  }
+  
+  .post-content {
+    background: #fff;
+    padding: 15px;
+    border-left: 4px solid #4CAF50;
+    margin-bottom: 20px;
+  }
+  
+  .comments {
+    margin-top: 20px;
+  }
+  
+  .comment-box {
+    background: #f1f1f1;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-left: 3px solid #4CAF50;
+  }
+  
+  .comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    resize: vertical;
+  }
+  
+  .comment-form button {
+    margin-top: 5px;
+    background: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .comment-form button:hover {
+    background-color: #45a049;
+  }
+  
+  .no-comments {
+    color: #888;
+    font-style: italic;
+  }
+  
+  .page-title {
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  
+  .btn {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  
+  .btn:hover {
+    background-color: #45a049;
+  }
+  
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .post-preview {
+    padding: 15px;
+    background-color: #fdfdfd;
+    border-left: 4px solid #4CAF50;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  
+  .form-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .form-box label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+  }
+  
+  .form-box input[type="text"],
+  .form-box input[type="password"],
+  .form-box textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+  
+  .site-header {
+    background-color: #2c3e50;
+    padding: 1em 0;
+    color: white;
+  }
+  
+  .site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .site-header .logo {
+    font-size: 24px;
+    margin: 0;
+  }
+  
+  .site-header .nav-link {
+    color: white;
+    margin-left: 15px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .site-header .nav-link:hover {
+    text-decoration: underline;
+  }
+  
+  .site-header .welcome {
+    margin-right: 15px;
+    font-style: italic;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  

@@ -1,0 +1,14 @@
+<h2 class="page-title">All Blog Posts</h2>
+
+<% if (user) { %>
+  <a href="/post/new" class="btn">+ New Post</a>
+<% } %>
+
+<div class="post-list">
+<% posts.forEach(post => { %>
+  <article class="post-preview">
+    <h3><a href="/post/<%= post.id %>"><%= post.title %></a></h3>
+    <p class="post-meta">by <%= post.username %></p>
+  </article>
+<% }) %>
+</div>

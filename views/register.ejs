@@ -1,0 +1,44 @@
+<h2 class="page-title">Register</h2>
+<form method="POST" action="/register" class="form-box" id="register-form">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+  <label for="username">Username:</label>
+  <input type="text" name="username" id="username">
+
+  <label for="password">Password:</label>
+  <input type="password" name="password" id="password" required minlength="6" placeholder="At least 6 characters">
+
+  <label for="confirm-password">Confirm Password:</label>
+  <input type="password" id="confirm-password" required placeholder="Repeat your password">
+
+  <button type="submit" class="btn">Register</button>
+</form>
+
+<script>
+  const form = document.getElementById('register-form');
+
+  form.addEventListener('submit', function (e) {
+    const username = document.getElementById('username');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm-password');
+
+    let messages = [];
+
+    if (username.value.trim().length < 3) {
+      messages.push('Username must be at least 3 characters');
+    }
+
+    if (password.value.length < 6) {
+      messages.push('Password must be at least 6 characters');
+    }
+
+    if (password.value !== confirmPassword.value) {
+      messages.push('Passwords do not match');
+    }
+
+    if (messages.length > 0) {
+      e.preventDefault();
+      alert(messages.join('\n'));
+    }
+  });
+</script>

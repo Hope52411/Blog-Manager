@@ -1,0 +1,36 @@
+<h2><%= post.title %></h2>
+<p class="post-meta">By <strong><%= post.username %></strong></p>
+
+<div class="post-content">
+  <p><%= post.content %></p>
+</div>
+
+<hr>
+
+<h3>Comments</h3>
+
+<% if (comments.length === 0) { %>
+  <p class="no-comments">No comments yet. Be the first to reply!</p>
+<% } %>
+
+<div class="comments">
+  <% comments.forEach(comment => { %>
+    <div class="comment-box">
+      <p><strong><%= comment.username %></strong></p>
+      <p><%= comment.content %></p>
+    </div>
+  <% }) %>
+</div>
+
+<% if (user) { %>
+  <hr>
+  <h4>Leave a Comment</h4>
+  <form method="POST" action="/post/<%= post.id %>/comment" class="comment-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <textarea name="content" placeholder="Write your comment here..." rows="3" required></textarea>
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+<% } else { %>
+  <p><a href="/login">Login</a> to comment on this post.</p>
+<% } %>
