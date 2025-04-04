@@ -5,21 +5,31 @@ exports.getRegister = (req, res) => {
   res.render('register');
 };
 
+// controllers/authController.js
+
 exports.postRegister = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, confirmPassword } = req.body;
+
+  // ✅ 服务器端也检查密码是否一致
+  if (password !== confirmPassword) {
+    return res.send('Passwords do not match.');
+  }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+
     await db.promise().query(
       'INSERT INTO users (username, password) VALUES (?, ?)',
       [username, hashedPassword]
     );
+
     res.redirect('/login');
   } catch (err) {
     console.error('Register Error:', err);
     res.send('Registration failed');
   }
 };
+
 
 exports.getLogin = (req, res) => {
   res.render('login');
