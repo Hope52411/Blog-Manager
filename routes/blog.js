@@ -2,17 +2,17 @@ const express = require('express');
 const router = express.Router();
 const blogController = require('../controllers/blogController');
 
-// 博客主页
+// Blog homepage
 router.get('/', blogController.getAllPosts);
 
-// 发布文章页面
+// Publish article page
 router.get('/post/new', blogController.getNewPost);
 router.post('/post/new', blogController.postNewPost);
 
-// 查看单篇文章
+// View individual articles
 router.get('/post/:id', blogController.getSinglePost);
 
-// 评论文章
+// Review article
 router.post('/post/:id/comment', blogController.postComment);
 
 module.exports = router;

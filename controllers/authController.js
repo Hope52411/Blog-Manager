@@ -10,17 +10,16 @@ exports.getRegister = (req, res) => {
 exports.postRegister = async (req, res) => {
   const { username, password, confirmPassword } = req.body;
 
-  // ✅ 服务器端也检查密码是否一致
   if (password !== confirmPassword) {
     return res.send('Passwords do not match.');
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+    // const hashedPassword = await bcrypt.hash(password, 10);
     await db.promise().query(
       'INSERT INTO users (username, password) VALUES (?, ?)',
-      [username, hashedPassword]
+      [username, password]
+      // [username, hashedPassword]
     );
 
     res.redirect('/login');
@@ -39,6 +38,7 @@ exports.postLogin = async (req, res) => {
   const { username, password } = req.body;
 
   try {
+    // Implement SQL injection
     const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
     const [rows] = await db.promise().query(query);
     const user = rows[0];

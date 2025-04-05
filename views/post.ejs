@@ -17,7 +17,8 @@
   <% comments.forEach(comment => { %>
     <div class="comment-box">
       <p><strong><%= comment.username %></strong></p>
-      <p><%= comment.content %></p>
+      <!-- Implementing XSS attacks (cross-site scripting) -->
+      <p><%- comment.content %></p>
     </div>
   <% }) %>
 </div>
@@ -26,7 +27,6 @@
   <hr>
   <h4>Leave a Comment</h4>
   <form method="POST" action="/post/<%= post.id %>/comment" class="comment-form">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <textarea name="content" placeholder="Write your comment here..." rows="3" required></textarea>
     <br>
     <button type="submit">Submit</button>
