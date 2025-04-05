@@ -48,9 +48,12 @@ app.use((req, res, next) => {
 // routes
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blog');
+const xssDemoRoutes = require('./routes/xssDemo');
 
 app.use(authRoutes);
 app.use(blogRoutes);
+app.use('/', xssDemoRoutes);
+app.use(express.static('public'));
 
 // 404 page
 app.use((req, res) => {
