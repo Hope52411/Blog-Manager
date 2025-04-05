@@ -53,6 +53,7 @@ const xssDemoRoutes = require('./routes/xssDemo');
 app.use(authRoutes);
 app.use(blogRoutes);
 app.use('/', xssDemoRoutes);
+app.use(express.static('public'));
 
 // 404 page
 app.use((req, res) => {

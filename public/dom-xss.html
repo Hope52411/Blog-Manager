@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DOM XSS Demo</title>
+</head>
+<body>
+  <h2>Welcome to DOM XSS Test</h2>
+
+  <script>
+    const input = decodeURIComponent(location.hash.substring(1));
+    document.write(input);  
+  </script>
+</body>
+</html>
