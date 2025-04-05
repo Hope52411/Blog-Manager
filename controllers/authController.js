@@ -11,7 +11,7 @@ exports.postRegister = async (req, res) => {
   const { username, password, confirmPassword } = req.body;
 
   if (password !== confirmPassword) {
-    return res.send('Passwords do not match.');
+    res.send(err.stack);
   }
 
   try {
@@ -25,7 +25,7 @@ exports.postRegister = async (req, res) => {
     res.redirect('/login');
   } catch (err) {
     console.error('Register Error:', err);
-    res.send('Registration failed');
+    res.send(err.stack);
   }
 };
 
