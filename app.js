@@ -4,7 +4,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const csurf = require('csurf');
+// const csurf = require('csurf');
 const morgan = require('morgan');
 const fs = require('fs');
 const winston = require('winston');
@@ -36,11 +36,11 @@ app.use(session({
 }));
 
 // CSRF 防护
-app.use(csurf());
+// app.use(csurf());
 
 // 自定义变量传入模板
 app.use((req, res, next) => {
-  res.locals.csrfToken = req.csrfToken();
+  // res.locals.csrfToken = req.csrfToken();
   res.locals.user = req.session.user;
   next();
 });

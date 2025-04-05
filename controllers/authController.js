@@ -39,13 +39,11 @@ exports.postLogin = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const [rows] = await db.promise().query(
-      'SELECT * FROM users WHERE username = ?',
-      [username]
-    );
+    const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+    const [rows] = await db.promise().query(query);
     const user = rows[0];
 
-    if (user && await bcrypt.compare(password, user.password)) {
+    if (user) {
       req.session.user = { id: user.id, username: user.username };
       res.redirect('/');
     } else {
@@ -56,6 +54,7 @@ exports.postLogin = async (req, res) => {
     res.send('Login error');
   }
 };
+
 
 exports.logout = (req, res) => {
   req.session.destroy(() => {
