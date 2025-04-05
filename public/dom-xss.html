@@ -1,0 +1,17 @@
+<!-- dom-xss.html (secure) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DOM XSS Protection</title>
+</head>
+<body>
+  <h2>Secure DOM XSS Demo</h2>
+  <div id="output"></div>
+
+  <script>
+    const input = decodeURIComponent(location.hash.substring(1));
+    document.getElementById("output").textContent = input; //  Safe way of DOM insertion 
+  </script>
+</body>
+</html>
