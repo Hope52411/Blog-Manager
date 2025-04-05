@@ -10,7 +10,6 @@ exports.getRegister = (req, res) => {
 exports.postRegister = async (req, res) => {
   const { username, password, confirmPassword } = req.body;
 
-  // ✅ 服务器端也检查密码是否一致
   if (password !== confirmPassword) {
     return res.send('Passwords do not match.');
   }

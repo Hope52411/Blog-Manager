@@ -8,56 +8,56 @@ const csurf = require('csurf');
 const morgan = require('morgan');
 const fs = require('fs');
 const winston = require('winston');
-const expressLayouts = require('express-ejs-layouts'); // ✅ 加入 layout 插件
+const expressLayouts = require('express-ejs-layouts');
 
 dotenv.config();
 const app = express();
 
-// 日志记录
+// Log recording
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), { flags: 'a' });
 app.use(morgan('combined', { stream: accessLogStream }));
 
-// 设置 EJS 模板引擎和 layout 插件
+// Set up the EJS template engine and layout plug-in
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(expressLayouts);                // ✅ 启用 layout 支持
-app.set('layout', 'layout');           // ✅ 指定默认 layout 文件为 layout.ejs（在 views 文件夹下）
+app.use(expressLayouts);                
+app.set('layout', 'layout');           
 
-// 中间件
+// middleware
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// session 管理
+// session management
 app.use(session({
   secret: 'blog-secret',
   resave: false,
   saveUninitialized: false,
 }));
 
-// CSRF 防护
+// CSRF Defense
 app.use(csurf());
 
-// 自定义变量传入模板
+// Custom variables are passed into the template
 app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
   res.locals.user = req.session.user;
   next();
 });
 
-// 路由
+// routes
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blog');
 
 app.use(authRoutes);
 app.use(blogRoutes);
 
-// 404 页面
+// 404 page
 app.use((req, res) => {
   res.status(404).send('404 Not Found');
 });
 
-// 启动服务器
+// start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);
