@@ -190,3 +190,20 @@ body {
     margin: 0 auto;
   }
   
+  .btn-inline {
+    padding: 4px 30px;
+    font-size: 17px;
+    max-width: 80px;
+    width: auto;
+    white-space: nowrap;
+    display: inline-flex;         /* ✅ 用 flex 布局 */
+    justify-content: center;     /* ✅ 水平居中 */
+    align-items: center;         /* ✅ 垂直居中 */
+    text-align: center;
+    margin-right: 6px;
+    height: 32px;                 /* ✅ 可选固定高度，让按钮大小一致 */
+    line-height: normal;
+  }
+  
+  
+  

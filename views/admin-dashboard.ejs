@@ -1,0 +1,27 @@
+<h2>Admin Dashboard</h2>
+
+<h3>All Posts</h3>
+<ul>
+  <% posts.forEach(post => { %>
+    <li>
+      <strong><%= post.title %></strong> by <%= post.username %>
+      <form method="POST" action="/admin/delete-post/<%= post.id %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+<h3>All Comments</h3>
+<ul>
+  <% comments.forEach(comment => { %>
+    <li>
+      <%= comment.content %> by <%= comment.username %> (on post ID <%= comment.post_id %>)
+      <form method="POST" action="/admin/delete-comment/<%= comment.id %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>

@@ -67,3 +67,43 @@ exports.postComment = async (req, res) => {
     res.send('Failed to add comment');
   }
 };
+
+exports.getEditPost = async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.session.user.id;
+
+  const [[post]] = await db.promise().query(
+    'SELECT * FROM posts WHERE id = ? AND user_id = ?',
+    [postId, userId]
+  );
+
+  if (!post) return res.status(403).send('Not authorized or post not found.');
+
+  res.render('edit-post', { post, csrfToken: req.csrfToken() });
+};
+
+exports.postEditPost = async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.session.user.id;
+  const { title, content } = req.body;
+
+  await db.promise().query(
+    'UPDATE posts SET title = ?, content = ? WHERE id = ? AND user_id = ?',
+    [title, content, postId, userId]
+  );
+
+  res.redirect(`/post/${postId}`);
+};
+
+exports.deletePost = async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.session.user.id;
+
+  await db.promise().query(
+    'DELETE FROM posts WHERE id = ? AND user_id = ?',
+    [postId, userId]
+  );
+
+  res.redirect('/');
+};
+

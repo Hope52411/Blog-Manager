@@ -1,0 +1,11 @@
+<h2>Edit Your Post</h2>
+<form method="POST" action="/post/edit/<%= post.id %>">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <label>Title:</label>
+  <input type="text" name="title" value="<%= post.title %>" required>
+
+  <label>Content:</label>
+  <textarea name="content" required><%= post.content %></textarea>
+
+  <button type="submit">Update Post</button>
+</form>
