@@ -155,5 +155,5 @@ git checkout insecure
 **Project**: Blog-Manager  
 **Module**: Secure Application Programming  
 **Student ID**: x23361123  
-**Student Name**: Xiangze Xue 
+**Student Name**: Xiangze Xue  
 **University**: National College of Ireland
