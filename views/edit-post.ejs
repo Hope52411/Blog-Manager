@@ -1,4 +1,5 @@
 <h2>Edit Your Post</h2>
+<a href="/" class="btn btn-inline">← Back to Home</a>
 <form method="POST" action="/post/edit/<%= post.id %>">
   <input type="hidden" name="_csrf" value="<%= csrfToken %>">
   <label>Title:</label>
@@ -7,5 +8,5 @@
   <label>Content:</label>
   <textarea name="content" required><%= post.content %></textarea>
 
-  <button type="submit">Update Post</button>
+  <button type="submit" class="btn">Update Post</button>
 </form>
