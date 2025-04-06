@@ -45,7 +45,14 @@ exports.postLogin = async (req, res) => {
     const user = rows[0];
 
     if (user && await bcrypt.compare(password, user.password)) {
-      req.session.user = { id: user.id, username: user.username };
+      req.session.user = {
+        id: user.id,
+        username: user.username,
+        role: user.role 
+      };
+      if (user.username === 'admin' || user.role === 'admin') {
+        return res.redirect('/admin/dashboard');
+      }
       res.redirect('/');
     } else {
       res.send('Login failed');

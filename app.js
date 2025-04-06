@@ -9,6 +9,7 @@ const morgan = require('morgan');
 const fs = require('fs');
 const winston = require('winston');
 const expressLayouts = require('express-ejs-layouts');
+const adminRoutes = require('./routes/admin');
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,13 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(expressLayouts);                
 app.set('layout', 'layout');           
+
+// session management
+app.use(session({
+  secret: 'blog-secret',
+  resave: false,
+  saveUninitialized: false,
+}));
 
 // middleware
 app.use(helmet());
@@ -38,13 +46,8 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/admin', adminRoutes);
 
-// session management
-app.use(session({
-  secret: 'blog-secret',
-  resave: false,
-  saveUninitialized: false,
-}));
 
 // CSRF Defense
 app.use(csurf());
