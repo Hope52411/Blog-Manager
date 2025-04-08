@@ -1,11 +1,10 @@
 const bcrypt = require('bcryptjs');
 const db = require('../models/db');
+const logger = require('../utils/logger'); 
 
 exports.getRegister = (req, res) => {
   res.render('register');
 };
-
-// controllers/authController.js
 
 exports.postRegister = async (req, res) => {
   const { username, password, confirmPassword } = req.body;
@@ -22,13 +21,19 @@ exports.postRegister = async (req, res) => {
       [username, hashedPassword]
     );
 
+    await logger.logAction({
+      userId: null, 
+      action: 'register_success',
+      ip: req.ip,
+      userAgent: req.headers['user-agent']
+    });
+
     res.redirect('/login');
   } catch (err) {
     console.error('Register Error:', err);
     res.send('Registration failed');
   }
 };
-
 
 exports.getLogin = (req, res) => {
   res.render('login');
@@ -48,14 +53,30 @@ exports.postLogin = async (req, res) => {
       req.session.user = {
         id: user.id,
         username: user.username,
-        role: user.role 
+        role: user.role
       };
+
+      await logger.logAction({
+        userId: user.id,
+        action: 'login_success',
+        ip: req.ip,
+        userAgent: req.headers['user-agent']
+      });
+
       if (user.username === 'admin' || user.role === 'admin') {
         return res.redirect('/admin/dashboard');
       }
-      res.redirect('/');
+
+      return res.redirect('/');
     } else {
-      res.send('Login failed');
+
+      await logger.logAction({
+        userId: null,
+        action: `login_failed_${username}`,
+        ip: req.ip,
+        userAgent: req.headers['user-agent']
+      });
+      return res.send('Login failed');
     }
   } catch (err) {
     console.error('Login Error:', err);
@@ -64,6 +85,16 @@ exports.postLogin = async (req, res) => {
 };
 
 exports.logout = (req, res) => {
+  const userId = req.session?.user?.id || null;
+
+  // ✅ 登出日志
+  logger.logAction({
+    userId,
+    action: 'logout',
+    ip: req.ip,
+    userAgent: req.headers['user-agent']
+  });
+
   req.session.destroy(() => {
     res.redirect('/login');
   });

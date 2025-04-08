@@ -1,4 +1,5 @@
 const db = require('../models/db');
+const logger = require('../utils/logger');
 
 exports.getAllPosts = async (req, res) => {
   try {
@@ -26,6 +27,14 @@ exports.postNewPost = async (req, res) => {
       'INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)',
       [title, content, userId]
     );
+
+    await logger.logAction({
+      userId,
+      action: 'post_create',
+      ip: req.ip,
+      userAgent: req.headers['user-agent']
+    });
+
     res.redirect('/');
   } catch (err) {
     console.error('Post Create Error:', err);
@@ -61,6 +70,14 @@ exports.postComment = async (req, res) => {
       'INSERT INTO comments (content, post_id, user_id) VALUES (?, ?, ?)',
       [content, postId, userId]
     );
+
+    await logger.logAction({
+      userId,
+      action: `comment_create_post_${postId}`,
+      ip: req.ip,
+      userAgent: req.headers['user-agent']
+    });
+
     res.redirect(`/post/${postId}`);
   } catch (err) {
     console.error('Comment Error:', err);
@@ -92,6 +109,13 @@ exports.postEditPost = async (req, res) => {
     [title, content, postId, userId]
   );
 
+  await logger.logAction({
+    userId,
+    action: `post_edit_${postId}`,
+    ip: req.ip,
+    userAgent: req.headers['user-agent']
+  });
+
   res.redirect(`/post/${postId}`);
 };
 
@@ -104,6 +128,12 @@ exports.deletePost = async (req, res) => {
     [postId, userId]
   );
 
+  await logger.logAction({
+    userId,
+    action: `post_delete_${postId}`,
+    ip: req.ip,
+    userAgent: req.headers['user-agent']
+  });
+
   res.redirect('/');
 };
-
