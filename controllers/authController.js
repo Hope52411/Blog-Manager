@@ -14,6 +14,15 @@ exports.postRegister = async (req, res) => {
   }
 
   try {
+    const [rows] = await db.promise().query(
+      'SELECT id FROM users WHERE username = ?',
+      [username]
+    );
+
+    if (rows.length > 0) {
+      return res.send('Username already exists. Please choose another one.');
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await db.promise().query(
@@ -31,9 +40,10 @@ exports.postRegister = async (req, res) => {
     res.redirect('/login');
   } catch (err) {
     console.error('Register Error:', err);
-    res.send('Registration failed');
+    res.send('Registration failed.');
   }
 };
+
 
 exports.getLogin = (req, res) => {
   res.render('login');
