@@ -23,6 +23,10 @@ exports.postNewPost = async (req, res) => {
   const userId = req.session.user.id;
 
   try {
+    if (title === 'DB_ERROR') {
+      throw new Error('Simulated database error');
+    }
+
     await db.promise().query(
       'INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)',
       [title, content, userId]
@@ -37,10 +41,11 @@ exports.postNewPost = async (req, res) => {
 
     res.redirect('/');
   } catch (err) {
-    console.error('Post Create Error:', err);
+    console.error('Post Create Error:', err.message);
     res.send('Failed to create post');
   }
 };
+
 
 exports.getSinglePost = async (req, res) => {
   const postId = req.params.id;
@@ -66,6 +71,10 @@ exports.postComment = async (req, res) => {
   const postId = req.params.id;
 
   try {
+    if (content === 'DB_ERROR_COMMENT') {
+      throw new Error('Simulated DB failure');
+    }
+
     await db.promise().query(
       'INSERT INTO comments (content, post_id, user_id) VALUES (?, ?, ?)',
       [content, postId, userId]
@@ -80,7 +89,7 @@ exports.postComment = async (req, res) => {
 
     res.redirect(`/post/${postId}`);
   } catch (err) {
-    console.error('Comment Error:', err);
+    console.error('Comment Error:', err.message);
     res.send('Failed to add comment');
   }
 };
@@ -103,37 +112,64 @@ exports.postEditPost = async (req, res) => {
   const postId = req.params.id;
   const userId = req.session.user.id;
   const { title, content } = req.body;
+  try {
+    if (title === 'DB_ERROR_EDIT') {
+      throw new Error('Simulated DB failure');
+    }
+    await db.promise().query(
+      'UPDATE posts SET title = ?, content = ? WHERE id = ? AND user_id = ?',
+      [title, content, postId, userId]
+    );
 
-  await db.promise().query(
-    'UPDATE posts SET title = ?, content = ? WHERE id = ? AND user_id = ?',
-    [title, content, postId, userId]
-  );
+    await logger.logAction({
+      userId,
+      action: `post_edit_${postId}`,
+      ip: req.ip,
+      userAgent: req.headers['user-agent']
+    });
 
-  await logger.logAction({
-    userId,
-    action: `post_edit_${postId}`,
-    ip: req.ip,
-    userAgent: req.headers['user-agent']
-  });
-
-  res.redirect(`/post/${postId}`);
+    res.redirect(`/post/${postId}`);
+  } catch (err) {
+    console.error('Edit Error:', err.message);
+    res.send('Failed to edit post');
+  }
 };
 
 exports.deletePost = async (req, res) => {
   const postId = req.params.id;
   const userId = req.session.user.id;
 
-  await db.promise().query(
-    'DELETE FROM posts WHERE id = ? AND user_id = ?',
-    [postId, userId]
-  );
+  try {
+    const [rows] = await db.promise().query(
+      'SELECT title FROM posts WHERE id = ? AND user_id = ?',
+      [postId, userId]
+    );
 
-  await logger.logAction({
-    userId,
-    action: `post_delete_${postId}`,
-    ip: req.ip,
-    userAgent: req.headers['user-agent']
-  });
+    const post = rows[0];
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
 
-  res.redirect('/');
+    if (post.title === 'DB_ERROR_DELETE') {
+      throw new Error('Simulated DB failure');
+    }
+
+    await db.promise().query(
+      'DELETE FROM posts WHERE id = ? AND user_id = ?',
+      [postId, userId]
+    );
+
+    await logger.logAction({
+      userId,
+      action: `post_delete_${postId}`,
+      ip: req.ip,
+      userAgent: req.headers['user-agent']
+    });
+
+    res.redirect('/');
+  } catch (err) {
+    console.error('DELETE Error:', err.message);
+    res.send('Failed to delete post');
+  }
 };
+

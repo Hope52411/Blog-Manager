@@ -5,28 +5,36 @@
 <% } %>
 
 <div class="post-list">
-  <% posts.forEach(post => { %>
-    <article class="post-preview">
-      <h3>
-        <a href="/post/<%= post.id %>"><%= post.title %></a>
-      </h3>
-      <p class="post-meta">by <%= post.username %></p>
+  <% if (posts.length === 0) { %>
+    <div class="empty-message">
+      <div class="icon">📭</div>
+      <p>No posts found</p>
+      <p>Be the first to create one!</p>
+    </div>    
+  <% } else { %>
+    <% posts.forEach(post => { %>
+      <article class="post-preview">
+        <h3>
+          <a href="/post/<%= post.id %>"><%= post.title %></a>
+        </h3>
+        <p class="post-meta">by <%= post.username %></p>
 
-      <% if (user && user.id === post.user_id) { %>
-        <div class="post-actions">
-          <!-- Edit Button -->
-          <form method="GET" action="/post/edit/<%= post.id %>" style="display:inline;">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <button type="submit" class="btn btn-inline">Edit</button>
-          </form>
+        <% if (user && user.id === post.user_id) { %>
+          <div class="post-actions">
+            <!-- Edit Button -->
+            <form method="GET" action="/post/edit/<%= post.id %>" style="display:inline;">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <button type="submit" class="btn btn-inline">Edit</button>
+            </form>
 
-          <!-- Delete Button -->
-          <form method="POST" action="/post/delete/<%= post.id %>" style="display:inline;">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <button type="submit" class="btn btn-inline">Delete</button>
-          </form>
-        </div>
-      <% } %>
-    </article>
-  <% }) %>
+            <!-- Delete Button -->
+            <form method="POST" action="/post/delete/<%= post.id %>" style="display:inline;">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <button type="submit" class="btn btn-inline">Delete</button>
+            </form>
+          </div>
+        <% } %>
+      </article>
+    <% }) %>
+  <% } %>
 </div>

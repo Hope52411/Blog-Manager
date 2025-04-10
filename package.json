@@ -8,7 +8,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "**Blog-Manager** is a secure programming project developed for the _Secure Application Programming_ module at National College of Ireland. This project demonstrates how common web vulnerabilities can be introduced and how they can be mitigated using industry best practices.",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
@@ -24,5 +24,9 @@
     "morgan": "^1.10.0",
     "mysql2": "^3.14.0",
     "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.1",
+    "playwright": "^1.51.1"
   }
 }
