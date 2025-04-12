@@ -13,6 +13,7 @@ const dbConfig = {
     database: process.env.DB_NAME,
 };
 
+// Helper to log in as Test2
 async function login(page) {
     await page.goto(`${baseUrl}/login`);
     await page.fill('input[name="username"]', 'Test2');
@@ -21,7 +22,7 @@ async function login(page) {
     await expect(page).toHaveURL(baseUrl);
 }
 
-// Backup original posts
+// Backup all posts
 async function backupPosts() {
     const conn = await mysql.createConnection(dbConfig);
     const [rows] = await conn.execute('SELECT * FROM posts');
@@ -29,7 +30,7 @@ async function backupPosts() {
     return rows;
 }
 
-// Backup original comments
+// Backup all comments
 async function backupComments() {
     const conn = await mysql.createConnection(dbConfig);
     const [rows] = await conn.execute('SELECT * FROM comments');
@@ -37,23 +38,23 @@ async function backupComments() {
     return rows;
 }
 
-// Clear all posts and comments
+// Delete all posts and comments
 async function clearPosts() {
     const conn = await mysql.createConnection(dbConfig);
-    await conn.execute('DELETE FROM comments'); // must delete comments first
+    await conn.execute('DELETE FROM comments'); // Delete comments first
     await conn.execute('DELETE FROM posts');
     await conn.end();
 }
 
-// Restore posts (keep original time and ID)
+// Restore posts using original data
 async function restorePosts(posts) {
     if (!posts || posts.length === 0) return;
 
     const conn = await mysql.createConnection(dbConfig);
     const insertQuery = `
-    INSERT INTO posts (id, title, content, user_id)
-    VALUES (?, ?, ?, ?)
-  `;
+        INSERT INTO posts (id, title, content, user_id)
+        VALUES (?, ?, ?, ?)
+    `;
 
     for (const post of posts) {
         await conn.execute(insertQuery, [
@@ -67,14 +68,14 @@ async function restorePosts(posts) {
     await conn.end();
 }
 
-// Restore comments
+// Restore comments using original data
 async function restoreComments(comments) {
     if (!comments || comments.length === 0) return;
 
     const conn = await mysql.createConnection(dbConfig);
     const insertQuery = `
-      INSERT INTO comments (id, content, post_id, user_id)
-      VALUES (?, ?, ?, ?)
+        INSERT INTO comments (id, content, post_id, user_id)
+        VALUES (?, ?, ?, ?)
     `;
 
     for (const comment of comments) {
@@ -88,10 +89,11 @@ async function restoreComments(comments) {
 
     await conn.end();
 }
-  
+
 const updatedTitle = 'Updated Title';
 const updatedContent = 'Updated content from Playwright';
 
+// UC-6 Normal Flow: Edit post successfully
 test('UC-6 Normal Flow', async ({ page }) => {
     await login(page);
     await page.goto(baseUrl);
@@ -99,20 +101,22 @@ test('UC-6 Normal Flow', async ({ page }) => {
     const firstEditBtn = page.locator('form[action^="/post/edit"] button').first();
     await firstEditBtn.click();
 
-    const originalPosts = await backupPosts(); // backup original posts
-    const originalComments = await backupComments(); // backup original comments
-    
+    const originalPosts = await backupPosts();
+    const originalComments = await backupComments();
+
     await page.waitForSelector('input[name="title"]');
     await page.fill('input[name="title"]', updatedTitle);
     await page.fill('textarea[name="content"]', updatedContent);
     await page.click('button[type="submit"]');
-    await expect(page.locator('h1.post-title')).toHaveText(updatedTitle);
-    await clearPosts(); 
 
-    await restorePosts(originalPosts); // restore posts after test
-    await restoreComments(originalComments); // restore comments after test
+    await expect(page.locator('h1.post-title')).toHaveText(updatedTitle);
+
+    await clearPosts();
+    await restorePosts(originalPosts);
+    await restoreComments(originalComments);
 });
 
+// UC-6 A1: Title or content is empty
 test('UC-6 A1', async ({ page }) => {
     await login(page);
     await page.goto(baseUrl);
@@ -133,6 +137,7 @@ test('UC-6 A1', async ({ page }) => {
     await expect(page).toHaveURL(/\/post\/edit\//);
 });
 
+// UC-6 Exception Flow: Simulate database error
 test('UC-6 Exception', async ({ page }) => {
     await login(page);
     await page.goto(baseUrl);

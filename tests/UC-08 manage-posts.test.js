@@ -20,7 +20,7 @@ async function login(page) {
     await page.click('button[type="submit"]');
 }
 
-test('UC-8 Normal Flow: Admin can delete post and comment', async ({ page }) => {
+test('UC-8 Normal Flow', async ({ page }) => {
     const postTitle = 'Manage Test Post';
     const commentText = 'Manage Test comment';
 

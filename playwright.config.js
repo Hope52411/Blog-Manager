@@ -12,4 +12,6 @@ module.exports = defineConfig({
     },
 
     testDir: './tests',
+
+    fullyParallel: false,
 });
