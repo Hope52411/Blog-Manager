@@ -31,7 +31,7 @@ test('UC-8 Normal Flow: Admin can delete post and comment', async ({ page }) => 
     await page.fill('textarea[name="content"]', 'This is a test post');
     await page.click('button[type="submit"]');
 
-    const postLink = page.locator('article.post-preview a', { hasText: postTitle });
+    const postLink = page.locator('article.post-preview a', { hasText: postTitle }).first();
     await expect(postLink).toBeVisible();
     const postHref = await postLink.getAttribute('href');
     await postLink.click();
