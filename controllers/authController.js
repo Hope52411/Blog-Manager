@@ -50,8 +50,10 @@ exports.postLogin = async (req, res) => {
       res.send('Login failed');
     }
   } catch (err) {
-    console.error('Login Error:', err);
-    res.send('Login error');
+    res.status(500).send(`
+      <h1>Login error</h1>
+      <pre>${err.stack}</pre>
+    `);
   }
 };
 
